@@ -8,11 +8,28 @@ datasource db {
 }
 
 model Book {
-  id       String  @id @default(uuid())
-  name     String  @unique
+  id       String     @id @default(uuid())
+  title    String     @unique
   author   String
   category String
-  reserved Boolean 
+  reserved Boolean
+  rating   Int
+  registry Registry[]
 
   @@map("books")
+}
+
+model Registry {
+  id     String  @id @default(uuid())
+  bookId String?
+  userId String?
+  Book   Book?   @relation(fields: [bookId], references: [id])
+  User   User?   @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  history   Registry[]
 }

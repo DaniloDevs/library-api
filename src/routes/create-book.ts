@@ -1,23 +1,32 @@
+import { Book } from "@prisma/client";
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
-import { Book } from "@prisma/client";
 
 
 export default async function CreateBook(server: FastifyInstance) {
-     server.post("/book", async (request, reply) => {
-          const { name, author, category } = request.body as Book
+     server.get("/book", async (request, reply) => {
+          const { title, category, author, rating, reserved } = request.body as Book
+
+          const existBook = await prisma.book.findUnique({ where: { title } })
+
+          if (existBook) {
+               return reply.status(401).send({
+                    Message: "Ja existe um livro com esse nome"
+               })
+          }
 
           const book = await prisma.book.create({
                data: {
-                    name,
-                    author,
+                    title,
                     category,
-                    reserved: false
+                    author,
+                    rating,
+                    reserved
                }
           })
 
-          return reply.code(201).send({
-               Message: `O livro ${book?.name} foi criado com sucesso`,
+          return reply.status(201).send({
+               Message: `O livro ${book.title} foi criado com sucesso`,
                Book: book
           })
      })

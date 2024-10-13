@@ -1,18 +1,34 @@
 # Library Lab
 
-| Tarefa                         | Status | Anonimo | Usuario |
-| ------------------------------ | :----: | :-----: | :-----: |
-| Criar livro                    |   ✅   |   ❌    |   ✔️    |
-| Procurar livro                 |   ✅   |   ✔️    |   ✔️    |
-| Procurar livro pelo id         |   ✅   |   ✔️    |   ✔️    |
-| Procurar livros pelo autor     |   ✅   |   ✔️    |   ✔️    |
-| Procurar livros pela categoria |   ✅   |   ✔️    |   ✔️    |
-| Reservar livro                 |   ✅   |   ❌    |   ✔️    |
-| Devolver livro                 |   ✅   |   ❌    |   ✔️    |
-| login                          |   ✖️   |   ✔️    |   ✔️    |
-| logout                         |   ✖️   |   ✔️    |   ✔️    |
+| Rotas                          | Status |
+| ------------------------------ | :----: |
+| Criar livro                    |   ✖️   |
+| Procurar livro                 |   ✖️   |
+| Procurar livro pelo id         |   ✖️   |
+| Procurar livros pelo autor     |   ✖️   |
+| Procurar livros pela categoria |   ✖️   |
+| Reservar livro                 |   ✖️   |
+| Devolver livro                 |   ✖️   |
+| Registrar reserva              |   ✖️   |
+| Resgistrar devolução           |   ✖️   |
+| login                          |   ✖️   |
+| logout                         |   ✖️   |
+
+| Rotas         | Status |
+| ------------- | :----: |
+| Anonimo       |   ✖️   |
+| aluno         |   ✖️   |
+| professor     |   ✖️   |
+| bibliotecario |   ✖️   |
 
 ## Lembretes
 
 - cookie
-- Teste
+
+- alunos
+- bibliotecario
+- professor
+- multa
+- clubes
+- atividades
+- eventos
