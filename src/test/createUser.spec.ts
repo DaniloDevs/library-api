@@ -1,11 +1,15 @@
-import { afterAll, expect, test } from "vitest";
+import { afterAll, beforeAll, expect, test } from "vitest";
 import { prisma } from "../lib/prisma";
 import { server } from "..";
 
-server.listen({ port: 0 })
 
-afterAll(async () => await prisma.user.delete({ where: { email: "create@exemple.com" } }))
- 
+beforeAll(() => server.listen({ port: 0 }))
+
+afterAll(async () => {
+     server.close()
+     await prisma.user.delete({ where: { email: "create@exemple.com" } })
+})
+
 test('Deveria ser possivel criar um usuario', async () => {
      const response = await server.inject({
           method: "POST",

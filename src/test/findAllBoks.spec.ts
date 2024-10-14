@@ -2,7 +2,8 @@ import { afterAll, beforeAll, expect, test } from "vitest"
 import { server } from ".."
 import { prisma } from "../lib/prisma"
 
-server.listen({port: 0})
+
+beforeAll(() => server.listen({ port: 0 }))
 
 beforeAll(async () => {
      await server.inject({
@@ -18,7 +19,10 @@ beforeAll(async () => {
      })
 })
 
-afterAll(async () => await prisma.book.delete({ where: { title: "Exemple: find all books" } }))
+afterAll(async () => {
+     server.close()
+     await prisma.book.delete({ where: { title: "Exemple: find all books" } })
+})
 
 
 test('Deveria ser possivel listar todos os livros', async () => {
@@ -40,7 +44,7 @@ test('Deveria ser possivel listar todos os livros de uma categoria', async () =>
           url: "/book?category=livre",
      })
 
-     const { Message, Category,Books } = JSON.parse(response.body)
+     const { Message, Category, Books } = JSON.parse(response.body)
 
      expect(response.statusCode).toBe(200)
      expect(Message).toBe(`Todos os livros da categoria ${Books[0].category} foram listados com sucesso`)
@@ -54,7 +58,7 @@ test('Deveria ser possivel listar todos os livros de um author', async () => {
           url: "/book?author=desconhecido",
      })
 
-     const { Message, Author ,Books } = JSON.parse(response.body)
+     const { Message, Author, Books } = JSON.parse(response.body)
 
      expect(response.statusCode).toBe(200)
      expect(Message).toBe(`Todos os livros do author ${Books[0].author} foram listados com sucesso`)

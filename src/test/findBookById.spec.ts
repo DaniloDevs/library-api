@@ -2,11 +2,13 @@ import { afterAll, beforeAll, expect, test } from "vitest"
 import { server } from ".."
 import { prisma } from "../lib/prisma"
 
-server.listen({ port: 0 })
+
 
 let bookId: string
 
 beforeAll(async () => {
+     server.listen({ port: 0 })
+
      const response = await server.inject({
           method: "POST",
           url: "/book",
@@ -24,7 +26,10 @@ beforeAll(async () => {
      bookId = Book.id
 })
 
-afterAll(async () => await prisma.book.delete({ where: { title: "Exemple: find book by id" } }))
+afterAll(async () => {
+     server.close()
+     await prisma.book.delete({ where: { title: "Exemple: find book by id" } })
+})
 
 
 test('Deveria ser possivel listar um livro pelo id', async () => {
