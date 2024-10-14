@@ -29,7 +29,8 @@ model Registry {
 
 model User {
   id        String     @id @default(uuid())
-  name      String     @unique
+  name      String
+  email     String     @unique
   createdAt DateTime   @default(now())
   history   Registry[]
 }
