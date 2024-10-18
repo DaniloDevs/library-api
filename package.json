@@ -17,6 +17,7 @@
     "@fastify/jwt": "^9.0.1",
     "@prisma/client": "^5.20.0",
     "@types/node": "^22.7.5",
+    "dayjs": "^1.11.13",
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.1",
     "prisma": "^5.20.0",
