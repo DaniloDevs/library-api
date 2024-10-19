@@ -7,30 +7,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Book {
+model Users {
   id       String     @id @default(uuid())
-  title    String     @unique
-  author   String
-  category String
-  reserved Boolean
-  rating   Int
-  registry Registry[]
+  name     String
+  email    String     @unique
+  gender   String
+  type     String     @default("student")
+  Students Students[]
+  Teachers Teachers[]
 
-  @@map("books")
+  @@map("user")
 }
 
-model Registry {
-  id     String  @id @default(uuid())
-  bookId String?
-  userId String?
-  Book   Book?   @relation(fields: [bookId], references: [id])
-  User   User?   @relation(fields: [userId], references: [id])
+model Students {
+  id              String         @id @default(uuid())
+  classRoom       String
+  wallet          Int
+  FavoriteBooks   FavoriteBooks? @relation(fields: [favoriteBooksId], references: [id], onDelete: Cascade)
+  favoriteBooksId String?
+  registration    String         @unique
+  userId          Users          @relation(fields: [usersId], references: [id], onDelete: Cascade)
+  usersId         String
+
+  @@map("student")
 }
 
-model User {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  createdAt DateTime   @default(now())
-  history   Registry[]
+model Teachers {
+  id          String @id @default(uuid())
+  teacherType String
+  cpf         String @unique
+  userId      Users  @relation(fields: [usersId], references: [id], onDelete: Cascade)
+  usersId     String
+
+  @@map("teacher")
+}
+
+model Books {
+  id              String         @id @default(uuid())
+  title           String         @unique
+  author          String
+  category        String
+  ISBN            String         @unique
+  rating          Int
+  FavoriteBooks   FavoriteBooks? @relation(fields: [favoriteBooksId], references: [id])
+  favoriteBooksId String?
+
+  @@map("book")
+}
+
+model FavoriteBooks {
+  id      String     @id @default(uuid())
+  student Students[]
+  book    Books[]
+
+  @@map("favorite_book")
 }
