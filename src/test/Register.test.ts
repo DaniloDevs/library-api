@@ -20,7 +20,6 @@ afterAll(async () => {
 
 describe('Register Routes', () => {
 
-
      test('deve ser possivel criar um aluno valido', async () => {
           const response = await server.inject({
                method: "POST",
