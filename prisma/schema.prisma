@@ -8,57 +8,24 @@ datasource db {
 }
 
 model Users {
-  id       String     @id @default(uuid())
-  name     String
-  email    String     @unique
-  gender   String
-  type     String     @default("student")
-  Students Students[]
-  Teachers Teachers[]
+  id     String @id @default(uuid())
+  name   String
+  email  String @unique
+  gender String
+  type   String
 
   @@map("user")
 }
 
-model Students {
-  id              String         @id @default(uuid())
-  classRoom       String
-  wallet          Int
-  FavoriteBooks   FavoriteBooks? @relation(fields: [favoriteBooksId], references: [id], onDelete: Cascade)
-  favoriteBooksId String?
-  registration    String         @unique
-  userId          Users          @relation(fields: [usersId], references: [id], onDelete: Cascade)
-  usersId         String
-
-  @@map("student")
-}
-
-model Teachers {
-  id          String @id @default(uuid())
-  teacherType String
-  cpf         String @unique
-  userId      Users  @relation(fields: [usersId], references: [id], onDelete: Cascade)
-  usersId     String
-
-  @@map("teacher")
-}
-
 model Books {
-  id              String         @id @default(uuid())
-  title           String         @unique
-  author          String
-  category        String
-  ISBN            String         @unique
-  rating          Int
-  FavoriteBooks   FavoriteBooks? @relation(fields: [favoriteBooksId], references: [id])
-  favoriteBooksId String?
+  id       String  @id @default(uuid())
+  title    String  @unique
+  author   String
+  category String
+  ISBN     String  @unique
+  rating   Int
+  reserved Boolean @default(false)
+  isValid  Boolean @default(true)
 
   @@map("book")
-}
-
-model FavoriteBooks {
-  id      String     @id @default(uuid())
-  student Students[]
-  book    Books[]
-
-  @@map("favorite_book")
 }
