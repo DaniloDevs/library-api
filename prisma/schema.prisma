@@ -8,11 +8,10 @@ datasource db {
 }
 
 model Users {
-  id     String @id @default(uuid())
-  name   String
-  email  String @unique
-  gender String
-  type   String
+  id      String  @id @default(uuid())
+  name    String
+  email   String  @unique
+  isValid Boolean @default(true)
 
   @@map("user")
 }
