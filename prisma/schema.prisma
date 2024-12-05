@@ -20,6 +20,7 @@ model Users {
 model Books {
   id       String  @id @default(uuid())
   title    String  @unique
+  slug     String  @unique
   author   String
   category String
   ISBN     String  @unique

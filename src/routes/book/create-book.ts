@@ -1,8 +1,8 @@
-import { Books } from './../../../node_modules/.pnpm/@prisma+client@5.20.0_prisma@5.20.0/node_modules/.prisma/client/index.d';
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import z, { isValid } from "zod";
+import z from "zod";
 import { prisma } from '../../lib/prisma';
+import { CreateSlug } from '../../utils/create-slug';
 
 
 export async function CreateBook(server: FastifyInstance) {
@@ -28,7 +28,13 @@ export async function CreateBook(server: FastifyInstance) {
 
                const book = await prisma.books.create({
                     data: {
-                         title, author, category, ISBN, rating, isValid
+                         title,
+                         slug: CreateSlug(title),
+                         author,
+                         category,
+                         ISBN,
+                         rating,
+                         isValid
                     }
                })
 
