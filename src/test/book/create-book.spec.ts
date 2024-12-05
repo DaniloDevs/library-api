@@ -1,19 +1,22 @@
 import { afterAll, describe, expect, test } from 'vitest'
 import { prisma } from '../../lib/prisma'
-import server from '../..'
+import { setupTestServer } from '../setup'
 
-afterAll(async () => { await prisma.books.deleteMany({ where: { isValid: false } }) })
 
 describe('Create Book Routes', () => {
+     afterAll(async () => { await prisma.books.deleteMany({ where: { isValid: false } }) })
+     
+     const { getServer } = setupTestServer();
+     
      test('Deve ser poissivel criar um livro valido', async () => {
-          const response = await server.inject({
+          const response = await getServer().inject({
                method: 'POST',
                url: '/create-book',
                body: {
                     title: 'iHelp',
                     author: 'danilo',
                     category: 'tecnologia',
-                    ISBN: '00000000',
+                    ISBN: '00001000',
                     rating: 5,
                     isValid: false
                }
