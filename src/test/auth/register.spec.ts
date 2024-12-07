@@ -8,7 +8,7 @@ describe('Register Auth Routes', () => {
 
      const { getServer } = setupTestServer();
 
-     test('Deve ser possivel se registrar com um email valido', async () => {
+     test('Deve ser possivel se registrar com dados valido', async () => {
           const response = await getServer().inject({
                method: 'POST',
                url: '/register',
@@ -22,6 +22,37 @@ describe('Register Auth Routes', () => {
           const { Message } = JSON.parse(response.body)
 
           expect(response.statusCode).toBe(201)
-          expect(Message).toBe( 'Foi possivel se cadastrar com sucesso!')
+          expect(Message).toBe('Foi possivel se cadastrar com sucesso!')
+     })
+
+     test('Não deve ser possivel se resgistrar com o mesmo email', async () => {
+          const response = await getServer().inject({
+               method: 'POST',
+               url: '/register',
+               body: {
+                    name: 'danilo',
+                    email: 'danilo@gmail.com',
+                    isValid: false
+               }
+          })
+
+          const { Message } = JSON.parse(response.body)
+
+          expect(response.statusCode).toBe(401)
+          expect(Message).toBe('O email escolhido já esta cadastrado')
+     })
+
+     test('Não deve ser possivel se resgistrar com dados invalidos', async () => {
+          const response = await getServer().inject({
+               method: 'POST',
+               url: '/register',
+               body: {
+                    name: 'danilo',
+                    email: 'danilo@gmail.com',
+                    isValid: false
+               }
+          })
+
+          expect(response.statusCode).toBe(401)
      })
 })

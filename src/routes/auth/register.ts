@@ -10,7 +10,7 @@ export async function RegisterUser(server: FastifyInstance) {
           .post('/register', {
                schema: {
                     body: z.object({
-                         name: z.string(),
+                         name: z.string().min(3),
                          email: z.string().email(),
                          isValid: z.boolean().optional()
                     })
@@ -20,7 +20,7 @@ export async function RegisterUser(server: FastifyInstance) {
 
                const existUser = await prisma.users.findUnique({ where: { email } })
 
-               if (existUser) return reply.code(401).send({ Message: 'O email escolhido ja esta cadastrado' })
+               if (existUser) return reply.code(401).send({ Message: 'O email escolhido já esta cadastrado' })
 
                await prisma.users.create({ data: { name, email, isValid } })
 

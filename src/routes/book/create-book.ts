@@ -12,11 +12,11 @@ export async function CreateBook(server: FastifyInstance) {
                schema: {
                     body: z.object({
                          title: z.string(),
-                         author: z.string(),
-                         category: z.string(),
-                         ISBN: z.string(),
+                         author: z.string().min(3),
+                         category: z.string().min(3),
+                         ISBN: z.string().min(3),
                          isValid: z.boolean().optional(),
-                         rating: z.coerce.number(),
+                         rating: z.coerce.number().int(),
                     })
                }
           }, async (request, reply) => {

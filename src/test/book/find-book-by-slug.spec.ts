@@ -3,12 +3,12 @@ import { prisma } from '../../lib/prisma'
 import { setupTestServer } from '../setup'
 
 
-describe('Find Book by Slug Routes',  () => {
-     afterAll(async () => { await prisma.books.deleteMany({ where: { isValid: false } }) }) 
-     
+describe('Find Book by Slug Routes', () => {
+     afterAll(async () => { await prisma.books.deleteMany({ where: { isValid: false } }) })
+
      const { getServer } = setupTestServer();
-      
-     test('Deve ser poissivel criar um livro valido', async () => {
+
+     test('Deve ser possivel buscar um livro por uma slug valida', async () => {
           await getServer().inject({
                method: 'POST',
                url: '/create-book',
@@ -21,8 +21,8 @@ describe('Find Book by Slug Routes',  () => {
                     isValid: false
                }
           })
-          
-          
+
+
           const response = await getServer().inject({
                method: 'get',
                url: '/book/smartia',
@@ -31,5 +31,16 @@ describe('Find Book by Slug Routes',  () => {
           const { Message, Book } = JSON.parse(response.body)
           expect(Message).toBe(`Foi possivel retornar o livro com sucesso!`)
           expect(Book.title).toBe('smartia')
+     })
+
+     test('Não deve ser posivel buscar um livro por uma slug invalida', async () => {
+          const response = await getServer().inject({
+               method: 'get',
+               url: '/book/ihels',
+          })
+
+          const { Message } = JSON.parse(response.body)
+
+          expect(Message).toBe(`Não foi possivel encontrar um livro com essa slug`)
      })
 })

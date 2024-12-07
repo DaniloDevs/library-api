@@ -18,7 +18,7 @@ export async function FindBookBySlug(server: FastifyInstance) {
 
                const book = await prisma.books.findUnique({ where: { slug } })
 
-               if(!book) return reply.code(401).send({Message: 'Não existe nenhum livro com essa slug'})
+               if(!book) return reply.code(401).send({Message: 'Não foi possivel encontrar um livro com essa slug'})
 
                return reply.code(200).send({
                     Message: "Foi possivel retornar o livro com sucesso!",
