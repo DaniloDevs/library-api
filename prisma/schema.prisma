@@ -8,24 +8,37 @@ datasource db {
 }
 
 model Users {
-  id      String  @id @default(uuid())
-  name    String
-  email   String  @unique
-  isValid Boolean @default(true)
+  id        String      @id @default(uuid())
+  name      String
+  email     String      @unique
+  isValid   Boolean     @default(true)
+  Registrys Registrys[]
 
   @@map("user")
 }
 
 model Books {
-  id       String  @id @default(uuid())
-  title    String  @unique
-  slug     String  @unique
-  author   String
-  category String
-  ISBN     String  @unique
-  rating   Int
-  reserved Boolean @default(false)
-  isValid  Boolean @default(true)
+  id        String      @id @default(uuid())
+  title     String      @unique
+  slug      String      @unique
+  author    String
+  category  String
+  ISBN      String      @unique
+  rating    Int
+  reserved  Boolean     @default(false)
+  isValid   Boolean     @default(true)
+  Registrys Registrys[]
 
   @@map("book")
+}
+
+model Registrys {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  user      Users    @relation(fields: [usersId], references: [id])
+  book      Books    @relation(fields: [booksId], references: [id])
+  usersId   String
+  booksId   String
+
+  @@map("registry")
 }

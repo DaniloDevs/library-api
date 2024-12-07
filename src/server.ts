@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance } from "fastify";
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { validatorCompiler, serializerCompiler } from "fastify-type-provider-zod";
 import { RegisterRoutes } from "./routes";
 import JWT from '@fastify/jwt'
@@ -13,6 +13,7 @@ export async function buildServer() {
      server.setValidatorCompiler(validatorCompiler);
      server.setSerializerCompiler(serializerCompiler);
 
+     
      // Configurando Plugins
      server.register(JWT, {
           secret: "abcdefghijklmnopqrstuvwxyz",
@@ -23,6 +24,15 @@ export async function buildServer() {
      })
 
      server.register(COOKIE)
+
+     //Configurando decoradores
+     server.decorate("auth", async function (request: FastifyRequest, reply: FastifyReply)  {
+          try {
+               await request.jwtVerify()
+          } catch (err) {
+               reply.send(err)
+          }
+     })
 
      // Configurando Rotas
      await RegisterRoutes(server);
