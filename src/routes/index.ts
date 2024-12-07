@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { CreateBook } from "./book/create-book";
 import { FindBookBySlug } from "./book/find-book-by-slug";
 import { RegisterUser } from "./auth/register";
+import { LoginUser } from "./auth/login";
 
 export async function RegisterRoutes(server: FastifyInstance) {
 
@@ -15,4 +16,5 @@ export async function RegisterRoutes(server: FastifyInstance) {
 
 	// Auth
 	server.register(RegisterUser)
+	server.register(LoginUser)
 }
