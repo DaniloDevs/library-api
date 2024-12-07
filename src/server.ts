@@ -8,19 +8,12 @@ import COOKIE from '@fastify/cookie'
 export async function buildServer() {
 
      const server = fastify()
-     setupCompilers(server);
-     setupPlugins(server)
-     await RegisterRoutes(server);
 
-     return server;
-}
-
-function setupCompilers(server: FastifyInstance) {
+     // Configurando compiladores
      server.setValidatorCompiler(validatorCompiler);
      server.setSerializerCompiler(serializerCompiler);
-}
 
-function setupPlugins(server: FastifyInstance) {
+     // Configurando Plugins
      server.register(JWT, {
           secret: "abcdefghijklmnopqrstuvwxyz",
           cookie: {
@@ -30,4 +23,9 @@ function setupPlugins(server: FastifyInstance) {
      })
 
      server.register(COOKIE)
+
+     // Configurando Rotas
+     await RegisterRoutes(server);
+
+     return server;
 }
