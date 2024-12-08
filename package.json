@@ -15,13 +15,12 @@
   "dependencies": {
     "@fastify/cookie": "^11.0.1",
     "@fastify/jwt": "^9.0.1",
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^6.0.1",
     "@types/node": "^22.7.5",
     "dayjs": "^1.11.13",
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.1",
     "fastify-type-provider-zod": "^4.0.2",
-    "prisma": "^5.20.0",
     "tsx": "^4.19.1",
     "typescript": "^5.6.3",
     "zod": "^3.23.8"
@@ -29,6 +28,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^2.1.3",
     "@vitest/ui": "^2.1.3",
+    "prisma": "^6.0.1",
     "vitest": "^2.1.3"
   }
 }
