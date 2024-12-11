@@ -1,25 +1,28 @@
+
+
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../lib/prisma";
+import { CreateSlug } from "../../utils/create-slug";
 
 
-export async function FindBookByCategory(server: FastifyInstance) {
+export async function FindBookByAuthor(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .get('/book/category/:category', {
+          .get('/book/author/:author', {
                schema: {
                     params: z.object({
-                         category: z.string()
+                         author: z.string().toLowerCase()
                     })
                }
           }, async (request, reply) => {
-               const { category } = request.params
+               const { author } = request.params
 
-               const [categorys, books] = await prisma.$transaction([
-                    prisma.categorys.findUnique({ where: { slug: category } }),
+               const [authors, books] = await prisma.$transaction([
+                    prisma.authors.findUnique({ where: { slug: CreateSlug(author) } }),
                     prisma.books.findMany({
-                         where: { category: { slug: category } },
+                         where: { author: { slug: CreateSlug(author) } },
                          select: {
                               title: true,
                               rating: true,
@@ -31,11 +34,11 @@ export async function FindBookByCategory(server: FastifyInstance) {
                     })
                ])
 
-               if (!categorys) return reply.code(401).send({ Message: 'A categoria informada não existe', category })
+               if (!authors) return reply.code(401).send({ Message: 'O autor informada não existe' })
 
 
                return reply.code(200).send({
-                    Message: 'Foi possivel listar todos os livros dessa categoria',
+                    Message: 'Foi possivel listar todos os livros desse autor',
                     Books: books.map(book => {
                          return {
                               title: book.title,

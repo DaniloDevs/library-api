@@ -24,19 +24,19 @@ model Books {
 }
 
 model Authors {
-  id      String  @id @default(uuid())
-  name    String  @unique
-  slug    String
-  Books   Books[]
+  id    String  @id @default(uuid())
+  name  String  @unique
+  slug  String  @unique
+  Books Books[]
 
   @@map("author")
 }
 
 model Categorys {
-  id      String  @id @default(uuid())
-  name    String  @unique
-  slug    String
-  Books   Books[]
+  id    String  @id @default(uuid())
+  name  String  @unique
+  slug  String  @unique
+  Books Books[]
 
   @@map("category")
 }

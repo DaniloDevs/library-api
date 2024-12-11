@@ -3,6 +3,7 @@ import { CreateBook } from "./book/create";
 import { FindAllBooks } from "./book/find-all";
 import { FindBookByCategory } from "./book/find-by-category";
 import { FindBookBySlug } from "./book/find-by-slug";
+import { FindBookByAuthor } from "./book/find-by-author";
 
 
 export async function RegisterRoutes(server: FastifyInstance) {
@@ -16,4 +17,5 @@ export async function RegisterRoutes(server: FastifyInstance) {
 	server.register(FindBookBySlug)
 	server.register(FindAllBooks)
 	server.register(FindBookByCategory)
+	server.register(FindBookByAuthor)
 }
