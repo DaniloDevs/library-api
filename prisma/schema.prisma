@@ -8,31 +8,35 @@ datasource db {
 }
 
 model Books {
-  id        String      @id @default(uuid())
-  title     String      @unique
-  slug      String      @unique
-  author    String
-  category  String
-  ISBN      String      @unique
-  rating    Int
-  reserved  Boolean     @default(false)
-  isValid   Boolean     @default(true)
+  id       String  @id @default(uuid())
+  title    String  @unique
+  slug     String  @unique
+  ISBN     String  @unique
+  rating   Int
+  reserved Boolean @default(false)
+
+  author      Authors   @relation(fields: [authorsId], references: [id])
+  category    Categorys @relation(fields: [categorysId], references: [id])
+  authorsId   String
+  categorysId String
 
   @@map("book")
 }
 
 model Authors {
-  id   String @id @default(uuid())
-  name String @unique
-  slug String
+  id      String  @id @default(uuid())
+  name    String  @unique
+  slug    String
+  Books   Books[]
 
   @@map("author")
 }
 
 model Categorys {
-  id   String @id @default(uuid())
-  name String @unique
-  slug String
+  id      String  @id @default(uuid())
+  name    String  @unique
+  slug    String
+  Books   Books[]
 
   @@map("category")
 }
