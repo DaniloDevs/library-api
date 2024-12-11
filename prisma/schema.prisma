@@ -7,30 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Book {
-  id       String     @id @default(uuid())
-  title    String     @unique
-  author   String
-  category String
-  reserved Boolean
+model Books {
+  id       String  @id @default(uuid())
+  title    String  @unique
+  slug     String  @unique
+  ISBN     String  @unique
   rating   Int
-  registry Registry[]
+  reserved Boolean @default(false)
 
-  @@map("books")
+  author      Authors   @relation(fields: [authorsId], references: [id])
+  category    Categorys @relation(fields: [categorysId], references: [id])
+  authorsId   String
+  categorysId String
+
+  @@map("book")
 }
 
-model Registry {
-  id     String  @id @default(uuid())
-  bookId String?
-  userId String?
-  Book   Book?   @relation(fields: [bookId], references: [id])
-  User   User?   @relation(fields: [userId], references: [id])
+model Authors {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  slug  String  @unique
+  Books Books[]
+
+  @@map("author")
 }
 
-model User {
-  id        String     @id @default(uuid())
-  name      String
-  email     String     @unique
-  createdAt DateTime   @default(now())
-  history   Registry[]
+model Categorys {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  slug  String  @unique
+  Books Books[]
+
+  @@map("category")
 }

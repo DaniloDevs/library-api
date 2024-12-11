@@ -1,34 +1,23 @@
-import fastify from "fastify";
-import CreateBook from "./routes/create-book";
-import FindAllBooks from "./routes/find-all-books";
-import FindBookById from "./routes/find-book-by-id";
-import CreateUser from "./routes/create-user";
-import FindUserById from "./routes/find-user-by-id";
+import { buildServer } from "./server";
 
-export const server = fastify()
+async function StartServer() {
+     try {
+          const server = await buildServer();
 
-try {
-     // Rotas
-     server.get("/", (req, res) => { return res.send("Server in Running!!") })
+          await server.listen({
+               port: 3031,
+               host: "0.0.0.0"
+          }).then(() => {
+               console.log('Server Running!')
+          })
 
-     server.register(CreateBook)
-     server.register(FindAllBooks)
-     server.register(FindBookById)
-     server.register(CreateUser)
-     server.register(FindUserById)
-
-     // Inicialização do server
-     server.listen({
-          port: 3031,
-          host: "0.0.0.0"
-     }).then(() => {
-          console.log("Server Running!")
-     })
-
-} catch (error) {
-     console.log(error)
-     process.exit(1)
+     } catch (error) {
+          console.error("Error ao iniciar o servidor:", error);
+          process.exit(1);
+     }
 }
 
+if (process.env.NODE_ENV !== 'test') {
+     StartServer();
+}
 
-server.ready()
