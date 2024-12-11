@@ -4,18 +4,25 @@ import { setupTestServer } from '../setup'
 
 
 describe('Find Book by Slug Routes', () => {
-     afterAll(async () => { await prisma.books.deleteMany({ where: { isValid: false } }) })
+     afterAll(async () => {
+          await prisma.$transaction([
+               prisma.books.deleteMany({ where: { slug: 'smartia' } }),
+               prisma.authors.deleteMany({ where: { name: 'ana' } }),
+               prisma.categorys.deleteMany({ where: { name: 'redes' } }),
+          ])
+     })
+
 
      const { getServer } = setupTestServer();
 
      test('Deve ser possivel buscar um livro por uma slug valida', async () => {
           await getServer().inject({
                method: 'POST',
-               url: '/create-book',
+               url: '/book/creating',
                body: {
                     title: 'smartia',
-                    author: 'danilo',
-                    category: 'tecnologia',
+                    author: 'ana',
+                    category: 'redes',
                     ISBN: '0000100',
                     rating: 5,
                     isValid: false
@@ -29,6 +36,8 @@ describe('Find Book by Slug Routes', () => {
           })
 
           const { Message, Book } = JSON.parse(response.body)
+
+          expect(response.statusCode).toBe(200)
           expect(Message).toBe(`Foi possivel retornar o livro com sucesso!`)
           expect(Book.title).toBe('smartia')
      })
@@ -41,6 +50,7 @@ describe('Find Book by Slug Routes', () => {
 
           const { Message } = JSON.parse(response.body)
 
+          expect(response.statusCode).toBe(401)
           expect(Message).toBe(`Não foi possivel encontrar um livro com essa slug`)
      })
 })
