@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { CreateBook } from "./book/create-book";
-import { FindBookBySlug } from "./book/find-book-by-slug";
-import { FindAllBooks } from "./book/find-all-books";
-import { FindBookByCategory } from "./book/find-book-by-category";
+import { CreateBook } from "./book/create";
+import { FindAllBooks } from "./book/find-all";
+import { FindBookByCategory } from "./book/find-by-category";
+import { FindBookBySlug } from "./book/find-by-slug";
 
 
 export async function RegisterRoutes(server: FastifyInstance) {
