@@ -8,19 +8,18 @@ import { CreateSlug } from '../../utils/create-slug';
 export async function CreateBook(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .post('/create-book', {
+          .post('/book/creating', {
                schema: {
                     body: z.object({
                          title: z.string(),
                          author: z.string().min(3),
                          category: z.string().min(3),
                          ISBN: z.string().min(3),
-                         isValid: z.boolean().optional(),
                          rating: z.coerce.number().int(),
                     })
                }
           }, async (request, reply) => {
-               const { title, author, category, ISBN, rating, isValid } = request.body
+               const { title, author, category, ISBN, rating } = request.body
 
                const existBook = await prisma.books.findUnique({ where: { ISBN } })
 
@@ -30,11 +29,26 @@ export async function CreateBook(server: FastifyInstance) {
                     data: {
                          title,
                          slug: CreateSlug(title),
-                         author,
-                         category,
                          ISBN,
                          rating,
-                         isValid
+                         author: {
+                              connectOrCreate: {
+                                   where: { name: author },
+                                   create: {
+                                        name: author,
+                                        slug: CreateSlug(author),
+                                   }
+                              }
+                         },
+                         category: {
+                              connectOrCreate: {
+                                   where: { name: category },
+                                   create: {
+                                        name: category,
+                                        slug: CreateSlug(author),
+                                   }
+                              }
+                         },
                     }
                })
 
