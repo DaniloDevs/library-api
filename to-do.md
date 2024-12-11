@@ -19,9 +19,9 @@
 | Rotas                 | Feito | Testado |
 | --------------------- | :---: | :-----: |
 | Create Book           |  ✅   |   ✅    |
-| Find All Books        |  ✖️   |   ✖️    |
+| Find All Books        |  ✅   |   ✅    |
 | Find Book By Slug     |  ✅   |   ✅    |
-| Find Book By Category |  ✖️   |   ✖️    |
+| Find Book By Category |  ✅   |   ✅    |
 | Find Book By Author   |  ✖️   |   ✖️    |
 | Reserd Book           |  ✖️   |   ✖️    |
 | Return Book           |  ✖️   |   ✖️    |
