@@ -45,7 +45,7 @@ export async function CreateBook(server: FastifyInstance) {
                                    where: { name: category },
                                    create: {
                                         name: category,
-                                        slug: CreateSlug(author),
+                                        slug: CreateSlug(category),
                                    }
                               }
                          },
