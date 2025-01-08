@@ -1,23 +1,17 @@
-import { buildServer } from "./server";
+import server from "./server";
 
-async function StartServer() {
-     try {
-          const server = await buildServer();
+// Iniciando o servidor
+try {
+     server.listen({
+          port: 3031,
+          host: "0.0.0.0"
+     }).then(() => {
+          console.log('Server Running!')
+     })
 
-          await server.listen({
-               port: 3031,
-               host: "0.0.0.0"
-          }).then(() => {
-               console.log('Server Running!')
-          })
-
-     } catch (error) {
-          console.error("Error ao iniciar o servidor:", error);
-          process.exit(1);
-     }
+} catch (error) {
+     console.error("Error ao iniciar o servidor:", error);
+     process.exit(1);
 }
 
-if (process.env.NODE_ENV !== 'test') {
-     StartServer();
-}
 
