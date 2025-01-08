@@ -10,7 +10,7 @@ import { CreateSlug } from "../../utils/create-slug";
 export async function FindBookByAuthor(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .get('/book/author/:author', {
+          .get('/books/author/:author', {
                schema: {
                     params: z.object({
                          author: z.string().toLowerCase()

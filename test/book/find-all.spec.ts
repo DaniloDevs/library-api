@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from 'vitest'
 import { prisma } from '../../src/lib/prisma'
-import { setupTestServer } from '../setup'
+import server from '../../src/server'
 
 
 describe('Find All Books Routes', () => {
@@ -12,12 +12,12 @@ describe('Find All Books Routes', () => {
           ])
      })
 
-     const { getServer } = setupTestServer();
+     
 
      test('Deve ser poissivel listar todos os livros', async () => {
-          await getServer().inject({
+          await server.inject({
                method: 'POST',
-               url: '/book/creating',
+               url: '/books/creating',
                body: {
                     title: 'uez',
                     author: 'renato',
@@ -28,9 +28,9 @@ describe('Find All Books Routes', () => {
                }
           })
 
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'GET',
-               url: '/book',
+               url: '/books',
           })
 
           const { Message, Books } = JSON.parse(response.body)

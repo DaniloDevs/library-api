@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from "vitest";
 import { prisma } from "../../src/lib/prisma";
-import { setupTestServer } from "../setup";
+import server from "../../src/server";
 
 
 describe('Find Books By Author - Routes', async () => {
@@ -13,12 +13,12 @@ describe('Find Books By Author - Routes', async () => {
      })
 
 
-     const { getServer } = setupTestServer();
+   
 
      test('Deve ser possivel listar todos os livros de um author', async () => {
-          await getServer().inject({
+          await server.inject({
                method: 'POST',
-               url: '/book/creating',
+               url: '/books/creating',
                body: {
                     title: 'Data Pro',
                     author: 'Gustavo',
@@ -30,9 +30,9 @@ describe('Find Books By Author - Routes', async () => {
           })
 
 
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'get',
-               url: '/book/author/gustavo',
+               url: '/books/author/gustavo',
           })
 
           const { Message, Books } = JSON.parse(response.body)
@@ -43,9 +43,9 @@ describe('Find Books By Author - Routes', async () => {
      })
 
      test('Não deve ser possivel listar os livros de um author que não existe', async () => {
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'get',
-               url: '/book/author/aspas',
+               url: '/books/author/aspas',
           })
 
           const { Message } = JSON.parse(response.body)

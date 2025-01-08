@@ -6,7 +6,7 @@ import { prisma } from "../../lib/prisma";
 export async function FindAllBooks(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .get('/book', async (request, reply) => {
+          .get('/books', async (request, reply) => {
                const books = await prisma.books.findMany()
 
 

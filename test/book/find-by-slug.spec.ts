@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from 'vitest'
 import { prisma } from '../../src/lib/prisma'
-import { setupTestServer } from '../setup'
+import server from '../../src/server'
 
 
 describe('Find Book by Slug Routes', () => {
@@ -13,12 +13,12 @@ describe('Find Book by Slug Routes', () => {
      })
 
 
-     const { getServer } = setupTestServer();
+     
 
      test('Deve ser possivel buscar um livro por uma slug valida', async () => {
-          await getServer().inject({
+          await server.inject({
                method: 'POST',
-               url: '/book/creating',
+               url: '/books/creating',
                body: {
                     title: 'smartia',
                     author: 'ana',
@@ -30,9 +30,9 @@ describe('Find Book by Slug Routes', () => {
           })
 
 
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'get',
-               url: '/book/smartia',
+               url: '/books/smartia',
           })
 
           const { Message, Book } = JSON.parse(response.body)
@@ -43,9 +43,9 @@ describe('Find Book by Slug Routes', () => {
      })
 
      test('Não deve ser posivel buscar um livro por uma slug invalida', async () => {
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'get',
-               url: '/book/ihels',
+               url: '/books/ihels',
           })
 
           const { Message } = JSON.parse(response.body)

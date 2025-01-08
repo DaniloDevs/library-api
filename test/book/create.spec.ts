@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, test } from 'vitest'
 import { prisma } from '../../src/lib/prisma'
-import { setupTestServer } from '../setup'
+import server from '../../src/server'
 
 
 describe('Create Book Routes', () => {
@@ -12,12 +12,10 @@ describe('Create Book Routes', () => {
           ])
      })
 
-     const { getServer } = setupTestServer();
-
      test('Deve ser poissivel criar um livro com dados invalidos', async () => {
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'POST',
-               url: '/book/creating',
+               url: '/books/creating',
                body: {
                     title: 'iHelp Front',
                     author: 'danilo',
@@ -35,9 +33,9 @@ describe('Create Book Routes', () => {
      })
 
      test('Não deve ser possivel criar um livro que já existe', async () => {
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'POST',
-               url: '/book/creating',
+               url: '/books/creating',
                body: {
                     title: 'iHelp',
                     author: 'danilo',
@@ -55,9 +53,9 @@ describe('Create Book Routes', () => {
      })
 
      test('Não deve ser possivel criar um livro com dados invaalidos', async () => {
-          const response = await getServer().inject({
+          const response = await server.inject({
                method: 'POST',
-               url: '/book/creating',
+               url: '/books/creating',
                body: {
                     title: 'i2',
                     author: 'da',

@@ -8,7 +8,7 @@ import { CreateSlug } from '../../utils/create-slug';
 export async function CreateBook(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .post('/book/creating', {
+          .post('/books/creating', {
                schema: {
                     body: z.object({
                          title: z.string(),

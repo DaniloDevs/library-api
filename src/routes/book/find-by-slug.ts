@@ -7,7 +7,7 @@ import { prisma } from "../../lib/prisma";
 export async function FindBookBySlug(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .get('/book/:slug', {
+          .get('/books/:slug', {
                schema: {
                     params: z.object({
                          slug: z.string()
