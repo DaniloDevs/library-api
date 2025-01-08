@@ -11,12 +11,11 @@ describe('Filter Books by Author ', async () => {
                prisma.categorys.deleteMany({ where: { name: 'futebol' } }),
           ])
      })
-
      
      test('Deve ser possivel listar todos os livros de um author', async () => {
           await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'Data Pro',
                     author: 'Gustavo',

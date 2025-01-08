@@ -15,7 +15,7 @@ describe('Find All Books Routes', () => {
      test('Deve ser poissivel listar todos os livros', async () => {
           await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'uez',
                     author: 'renato',
@@ -36,7 +36,4 @@ describe('Find All Books Routes', () => {
           expect(Message).toBe("Foi possível listar todos os livros.")
           expect(Books[0]).toBeDefined()
      })
-
-   
-   
 })

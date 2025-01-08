@@ -15,7 +15,7 @@ describe('Create Book Routes', () => {
      test('Deve ser poissivel criar um livro com dados invalidos', async () => {
           const response = await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'iHelp Front',
                     author: 'danilo',
@@ -35,7 +35,7 @@ describe('Create Book Routes', () => {
      test('Não deve ser possivel criar um livro que já existe', async () => {
           const response = await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'iHelp',
                     author: 'danilo',
@@ -55,7 +55,7 @@ describe('Create Book Routes', () => {
      test('Não deve ser possivel criar um livro com dados invaalidos', async () => {
           const response = await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'i2',
                     author: 'da',

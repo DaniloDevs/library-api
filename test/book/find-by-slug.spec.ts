@@ -13,12 +13,10 @@ describe('Find Book by Slug Routes', () => {
      })
 
 
-     
-
      test('Deve ser possivel buscar um livro por uma slug valida', async () => {
           await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'smartia',
                     author: 'ana',
@@ -28,7 +26,6 @@ describe('Find Book by Slug Routes', () => {
                     isValid: false
                }
           })
-
 
           const response = await server.inject({
                method: 'get',

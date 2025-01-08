@@ -14,7 +14,7 @@ describe('Filter Books by Category and Author', async () => {
      test('Deve ser possível listar todos os livros de um autor em uma categoria específica', async () => {
           await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'Microsoft.eds',
                     author: 'Naruto',
@@ -24,7 +24,6 @@ describe('Filter Books by Category and Author', async () => {
                },
           })
 
-          // Fazer a requisição
           const response = await server.inject({
                method: 'GET',
                url: '/books?author=naruto&category=vilas',

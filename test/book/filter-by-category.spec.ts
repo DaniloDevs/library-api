@@ -11,13 +11,11 @@ describe('Filter Books by Category', async () => {
                prisma.categorys.deleteMany({ where: { name: 'Energia' } }),
           ])
      })
-
-
      
      test('Deve ser possivel listar todos os livros de uma category', async () => {
           await server.inject({
                method: 'POST',
-               url: '/books/creating',
+               url: '/books',
                body: {
                     title: 'Power Tech',
                     author: 'Bruno',
