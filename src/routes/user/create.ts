@@ -3,7 +3,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../lib/prisma";
 
-export default async function CreateUser(server: FastifyInstance) {
+export async function CreateUser(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
           .post('/users', {
@@ -23,8 +23,8 @@ export default async function CreateUser(server: FastifyInstance) {
                     prisma.users.findUnique({ where: { username } }),
                ])
 
-               if (!existEmail) return reply.status(400).send({ Message: "Esse email já esta sendo utilizado" })
-               if (!existUsername) return reply.status(400).send({ Message: "Esse username já esta sendo utilizado" })
+               if (existEmail) return reply.status(400).send({ Message: "Esse email já esta sendo utilizado" })
+               if (existUsername) return reply.status(400).send({ Message: "Esse username já esta sendo utilizado" })
 
 
                const user = await prisma.users.create({
@@ -38,7 +38,7 @@ export default async function CreateUser(server: FastifyInstance) {
 
                return reply.status(201).send({
                     Message: "O usuario foi criado com sucesso",
-                    userId: user.id
+                    UserId: user.id
                })
           })
 }
