@@ -8,27 +8,43 @@ datasource db {
 }
 
 model Users {
-  id       String @id @default(uuid())
-  name     String
-  username String @unique
-  email    String @unique
-  password String
+  id           String         @id @default(uuid())
+  name         String
+  username     String         @unique
+  email        String         @unique
+  password     String
+  reservations Reservations[]
 
   @@map("user")
 }
 
-model Books {
-  id       String  @id @default(uuid())
-  title    String  @unique
-  slug     String  @unique
-  ISBN     String  @unique
-  rating   Int
-  reserved Boolean @default(false)
+model Reservations {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  status    String // "ACTIVE", "RETURNED", "CANCELLED"
+  usersId   String?
+  booksId   String?
+  Books     Books?   @relation(fields: [booksId], references: [id])
+  Users     Users?   @relation(fields: [usersId], references: [id])
 
-  author      Authors   @relation(fields: [authorsId], references: [id])
-  category    Categorys @relation(fields: [categorysId], references: [id])
-  authorsId   String
-  categorysId String
+  @@map("reserved")
+}
+
+model Books {
+  id           String         @id @default(uuid())
+  title        String         @unique
+  slug         String         @unique
+  ISBN         String         @unique
+  rating       Int
+  reserved     Boolean        @default(false)
+  authorsId    String
+  status       String // RESERVED - AVAILABLE
+  categorysId  String
+  reservations Reservations[]
+
+  author   Authors   @relation(fields: [authorsId], references: [id])
+  category Categorys @relation(fields: [categorysId], references: [id])
 
   @@map("book")
 }
