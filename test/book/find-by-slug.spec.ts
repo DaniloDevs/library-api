@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, test } from 'vitest'
-import { prisma } from '../../lib/prisma'
+import { prisma } from '../../src/lib/prisma'
 import { setupTestServer } from '../setup'
 
 

@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, test } from 'vitest'
-import { prisma } from '../../lib/prisma'
+import { prisma } from '../../src/lib/prisma'
 import { setupTestServer } from '../setup'
 
 
@@ -68,7 +68,6 @@ describe('Create Book Routes', () => {
                }
           })
           
-          expect(response.statusCode).toBe(400)
           expect(response.statusCode).toBe(400)
      })
 })
