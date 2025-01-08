@@ -12,8 +12,6 @@ describe('Find All Books Routes', () => {
           ])
      })
 
-     
-
      test('Deve ser poissivel listar todos os livros', async () => {
           await server.inject({
                method: 'POST',
@@ -35,7 +33,10 @@ describe('Find All Books Routes', () => {
 
           const { Message, Books } = JSON.parse(response.body)
 
-          expect(Message).toBe("Todos os livros foram retornados com sucesso")
-          expect(Books).toBeDefined()
+          expect(Message).toBe("Foi possível listar todos os livros.")
+          expect(Books[0]).toBeDefined()
      })
+
+   
+   
 })

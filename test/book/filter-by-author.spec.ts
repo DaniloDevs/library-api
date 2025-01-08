@@ -3,7 +3,7 @@ import { prisma } from "../../src/lib/prisma";
 import server from "../../src/server";
 
 
-describe('Find Books By Author - Routes', async () => {
+describe('Filter Books by Author ', async () => {
      afterAll(async () => {
           await prisma.$transaction([
                prisma.books.deleteMany({ where: { title: 'Data Pro' } }),
@@ -12,9 +12,7 @@ describe('Find Books By Author - Routes', async () => {
           ])
      })
 
-
-   
-
+     
      test('Deve ser possivel listar todos os livros de um author', async () => {
           await server.inject({
                method: 'POST',
@@ -29,28 +27,27 @@ describe('Find Books By Author - Routes', async () => {
                }
           })
 
-
           const response = await server.inject({
                method: 'get',
-               url: '/books/author/gustavo',
+               url: '/books?author=gustavo',
           })
 
           const { Message, Books } = JSON.parse(response.body)
 
           expect(response.statusCode).toBe(200)
-          expect(Message).toBe(`Foi possivel listar todos os livros desse autor`)
+          expect(Message).toBe(`Foi possível listar todos os livros do autor "gustavo".`)
           expect(Books).toBeDefined()
      })
 
      test('Não deve ser possivel listar os livros de um author que não existe', async () => {
           const response = await server.inject({
                method: 'get',
-               url: '/books/author/aspas',
+               url: '/books?author=aspas',
           })
 
           const { Message } = JSON.parse(response.body)
 
-          expect(response.statusCode).toBe(401)
-          expect(Message).toBe(`O autor informada não existe`)
+          expect(response.statusCode).toBe(400)
+          expect(Message).toBe(`O autor "aspas" informado não existe.`)
      })
 })
