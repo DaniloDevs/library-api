@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -22,7 +22,7 @@ model Reservations {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   expiresAt DateTime
-  status    String // "ACTIVE", "RETURNED", "CANCELLED"
+  status    StatusReserved
   usersId   String?
   booksId   String?
   Books     Books?   @relation(fields: [booksId], references: [id])
@@ -39,7 +39,7 @@ model Books {
   rating       Int
   reserved     Boolean        @default(false)
   authorsId    String
-  status       String // RESERVED - AVAILABLE
+  status       StatusBook     @default(AVAILABLE)
   categorysId  String
   reservations Reservations[]
 
@@ -65,4 +65,15 @@ model Categorys {
   Books Books[]
 
   @@map("category")
+}
+
+enum StatusBook {
+  RESERVED
+  AVAILABLE
+}
+
+enum StatusReserved {
+  ACTIVE
+  RETURNED
+  CANCELLED
 }
