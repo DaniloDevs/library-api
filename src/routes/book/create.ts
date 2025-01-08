@@ -31,6 +31,7 @@ export async function CreateBook(server: FastifyInstance) {
                          slug: CreateSlug(title),
                          ISBN,
                          rating,
+                         status: "AVAILABLE",
                          author: {
                               connectOrCreate: {
                                    where: { name: author },

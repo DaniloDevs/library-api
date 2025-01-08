@@ -59,11 +59,6 @@ export async function CreateReservation(server: FastifyInstance) {
                     })
                ])
 
-               await prisma.books.update({
-                    where: { id: bookId },
-                    data: { status: "RESERVED" }
-               })
-
                return reply.status(201).send({
                     Message: `Foi possivel reservar com sucesso o livro ${book.title} ate a data ${expiresAt}`,
                     ReservedId: reserved.id,
