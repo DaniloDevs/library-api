@@ -5,6 +5,7 @@ import { FindBookBySlug } from "./book/find-by-slug";
 import { CreateUser } from "./user/create";
 import { FindUserByUsername } from "./user/find-by-username";
 import { CreateReservation } from "./reserved/create";
+import { CancelReservertion } from "./reserved/cancel";
 
 
 export async function RegisterRoutes(server: FastifyInstance) {
@@ -24,4 +25,5 @@ export async function RegisterRoutes(server: FastifyInstance) {
 
 	// Rerserved
 	server.register(CreateReservation)
+	server.register(CancelReservertion)
 }

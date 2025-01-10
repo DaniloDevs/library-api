@@ -9,10 +9,11 @@ export async function CreateUser(server: FastifyInstance) {
           .post('/users', {
                schema: {
                     body: z.object({
-                         name: z.string(),
+                         name: z
+                              .string(),
                          email: z.string().email(),
                          password: z.string(),
-                         username: z.string()
+                         username: z.string().toLowerCase()
                     })
                }
           }, async (request, reply) => {

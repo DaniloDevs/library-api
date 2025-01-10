@@ -58,7 +58,9 @@ export async function CreateReservation(server: FastifyInstance) {
                          data: { status: "RESERVED" }
                     })
                ])
+
                const formattedExpiresDate = dayjs(expiresAt).format('LL')
+               
                return reply.status(201).send({
                     Message: `Foi possivel reservar com sucesso o livro ${book.title} ate a data ${formattedExpiresDate}`,
                     ReservedId: reserved.id,
