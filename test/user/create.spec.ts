@@ -6,7 +6,7 @@ import server from '../../src/server'
 describe('Create User Routes', () => {
      afterAll(async () => {
           await prisma.$transaction([
-               prisma.users.deleteMany({ where: { email: "danilo.exp@gmail.com" } })
+               prisma.users.deleteMany({ where: { email: "re.exp@gmail.com" } })
           ])
      })
 
@@ -15,10 +15,10 @@ describe('Create User Routes', () => {
                method: 'POST',
                url: '/users',
                body: {
-                    name: 'Danilo Romão',
-                    email: 'danilo.exp@gmail.com',
+                    name: 'Renato Romão',
+                    email: 're.exp@gmail.com',
                     password: '123',
-                    username: 'danidani',
+                    username: 'rerere',
                }
           })
 
@@ -28,13 +28,14 @@ describe('Create User Routes', () => {
           expect(Message).toBe(`O usuario foi criado com sucesso`)
           expect(UserId).toBeDefined()
      })
+
      test('Não deve ser possivel criar um usuario com um email já utilizado', async () => {
           const response = await server.inject({
                method: 'POST',
                url: '/users',
                body: {
                     name: 'Danilo Romão',
-                    email: 'danilo.exp@gmail.com',
+                    email: 're.exp@gmail.com',
                     password: '123',
                     username: 'danidani',
                }
@@ -45,6 +46,7 @@ describe('Create User Routes', () => {
           expect(response.statusCode).toBe(400)
           expect(Message).toBe(`Esse email já esta sendo utilizado`)
      })
+
      test('Não deve ser possivel criar um usuario com um username já utilizado', async () => {
           const response = await server.inject({
                method: 'POST',
@@ -53,7 +55,7 @@ describe('Create User Routes', () => {
                     name: 'Danilo Romão',
                     email: 'romao.exp@gmail.com',
                     password: '123',
-                    username: 'danidani',
+                    username: 'rerere',
                }
           })
 

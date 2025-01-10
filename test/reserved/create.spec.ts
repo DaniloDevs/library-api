@@ -6,46 +6,39 @@ import server from '../../src/server'
 describe('Create Register Routes', async () => {
      afterAll(async () => {
           await prisma.$transaction([
-               prisma.books.deleteMany({ where: { slug: 'trivago-com' } }),
-               prisma.authors.deleteMany({ where: { slug: 'zeze' } }),
-               prisma.categorys.deleteMany({ where: { slug: 'hotel' } }),
-               prisma.users.deleteMany({ where: { email: "dada.exp@gmail.com" } }),
-               prisma.reservations.deleteMany({ where: { id: reserverdId } })
+               prisma.reservations.deleteMany({
+                    where: {
+                         Books: {
+                              id: booksId,
+                         },
+                    },
+               }),
+               prisma.books.update({
+                    where: { id: booksId },
+                    data: {
+                         status: 'AVAILABLE'
+                    }
+               })
           ])
      })
 
-     let reserverdId: string
 
      const responseUser = await server.inject({
-          method: 'POST',
-          url: '/users',
-          body: {
-               name: 'Danilo Romão',
-               email: 'dada.exp@gmail.com',
-               password: '123',
-               username: 'dadadada',
-          }
+          method: 'GET',
+          url: '/users/danidani',
      })
-
-     expect(responseUser.statusCode).toBe(201)
 
      const responseBook = await server.inject({
-          method: 'POST',
-          url: '/books',
-          body: {
-               title: 'Trivago Com',
-               author: 'zeze',
-               category: 'hotel',
-               ISBN: '0100010110',
-               rating: 5,
-          }
+          method: 'get',
+          url: '/books/ihelp-backends',
      })
 
-     expect(responseBook.statusCode).toBe(201)
 
      const { Book } = JSON.parse(responseBook.body)
-     const { UserId } = JSON.parse(responseUser.body)
+     const { User } = JSON.parse(responseUser.body)
 
+     let booksId: string
+     booksId = Book.id
 
      test('Deve ser possivel poder reservar um livro disponivel', async () => {
           const response = await server.inject({
@@ -54,14 +47,14 @@ describe('Create Register Routes', async () => {
                body: {
                     expiresAt: "3025-02-09T20:49:50.960Z",
                     bookId: Book.id,
-                    userId: UserId,
+                    userId: User.id,
                }
           })
 
           const { Message, ReservedId } = JSON.parse(response.body)
-          reserverdId = ReservedId
 
-          expect(Message).toBe("Foi possivel reservar com sucesso o livro Trivago Com ate a data 9 de fevereiro de 3025")
+
+          expect(Message).toBe("Foi possivel reservar com sucesso o livro iHelp Backends ate a data 9 de fevereiro de 3025")
           expect(response.statusCode).toBe(201)
           expect(ReservedId).toBeDefined()
      })
@@ -72,12 +65,12 @@ describe('Create Register Routes', async () => {
                body: {
                     expiresAt: "1025-02-08T20:49:50.960Z",
                     bookId: Book.id,
-                    userId: UserId,
+                    userId: User.id,
                }
           })
 
           const { Message, ReservedId } = JSON.parse(response.body)
-          reserverdId = ReservedId
+
 
           expect(Message).toBe("O livro deve ser reservado ate uma data maior que hoje")
           expect(response.statusCode).toBe(400)
@@ -90,7 +83,7 @@ describe('Create Register Routes', async () => {
                body: {
                     expiresAt: "3025-02-09T20:49:50.960Z",
                     bookId: Book.id,
-                    userId: UserId,
+                    userId: User.id,
                }
           })
 
@@ -107,7 +100,7 @@ describe('Create Register Routes', async () => {
                body: {
                     expiresAt: "3025-02-09T20:49:50.960Z",
                     bookId: "11",
-                    userId: UserId,
+                    userId: User.id,
                }
           })
 
@@ -123,7 +116,7 @@ describe('Create Register Routes', async () => {
                body: {
                     expiresAt: "3025-02-09T20:49:50.960Z",
                     bookId: Book.id,
-                    userId:"11",
+                    userId: "11",
                }
           })
 

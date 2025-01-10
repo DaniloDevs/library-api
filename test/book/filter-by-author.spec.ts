@@ -1,41 +1,19 @@
-import { afterAll, describe, expect, test } from "vitest";
-import { prisma } from "../../src/lib/prisma";
+import {  describe, expect, test } from "vitest";
 import server from "../../src/server";
 
 
-describe('Filter Books by Author ', async () => {
-     afterAll(async () => {
-          await prisma.$transaction([
-               prisma.books.deleteMany({ where: { title: 'Data Pro' } }),
-               prisma.authors.deleteMany({ where: { name: 'Gustavo' } }),
-               prisma.categorys.deleteMany({ where: { name: 'futebol' } }),
-          ])
-     })
-     
+describe('Filter Books by Author ', async () => {     
      test('Deve ser possivel listar todos os livros de um author', async () => {
-          await server.inject({
-               method: 'POST',
-               url: '/books',
-               body: {
-                    title: 'Data Pro',
-                    author: 'Gustavo',
-                    category: 'futebol',
-                    ISBN: '1010100',
-                    rating: 5,
-                    isValid: false
-               }
-          })
-
           const response = await server.inject({
                method: 'get',
-               url: '/books?author=gustavo',
+               url: '/books?author=danilo',
           })
 
           const { Message, Books } = JSON.parse(response.body)
 
           expect(response.statusCode).toBe(200)
-          expect(Message).toBe(`Foi possível listar todos os livros do autor "gustavo".`)
-          expect(Books).toBeDefined()
+          expect(Message).toBe(`Foi possível listar todos os livros do autor "danilo".`)
+          expect(Array.isArray(Books)).toBe(true)
      })
 
      test('Não deve ser possivel listar os livros de um author que não existe', async () => {

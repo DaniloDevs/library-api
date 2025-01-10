@@ -6,9 +6,9 @@ import server from '../../src/server'
 describe('Create Book Routes', () => {
      afterAll(async () => {
           await prisma.$transaction([
-               prisma.books.deleteMany({ where: { slug: 'ihelp-front' } }),
-               prisma.authors.deleteMany({ where: { name: 'danilo' } }),
-               prisma.categorys.deleteMany({ where: { name: 'suporte' } }),
+               prisma.books.deleteMany({ where: { title: 'Uez Company' } }),
+               prisma.authors.deleteMany({ where: { name: 'Roberto' } }),
+               prisma.categorys.deleteMany({ where: { slug: 'servico' } }),
           ])
      })
 
@@ -17,19 +17,19 @@ describe('Create Book Routes', () => {
                method: 'POST',
                url: '/books',
                body: {
-                    title: 'iHelp Front',
-                    author: 'danilo',
-                    category: 'suporte',
-                    ISBN: '010001000',
+                    title: 'Uez Company',
+                    author: 'Roberto',
+                    category: 'Servico',
+                    ISBN: '110101001',
                     rating: 5,
                }
           })
-
+          
           const { Message, Book } = JSON.parse(response.body)
 
           expect(response.statusCode).toBe(201)
-          expect(Message).toBe(`O livro iHelp Front foi cadastrado com sucesso!`)
-          expect(Book.title).toBe('iHelp Front')
+          expect(Message).toBe(`O livro Uez Company foi cadastrado com sucesso!`)
+          expect(Book.title).toBe('Uez Company')
      })
 
      test('Não deve ser possivel criar um livro que já existe', async () => {
@@ -37,12 +37,11 @@ describe('Create Book Routes', () => {
                method: 'POST',
                url: '/books',
                body: {
-                    title: 'iHelp',
-                    author: 'danilo',
-                    category: 'suporte',
-                    ISBN: '010001000',
+                    title: 'Uez Company',
+                    author: 'Roberto',
+                    category: 'Suporte',
+                    ISBN: '110101001',
                     rating: 5,
-                    isValid: false
                }
           })
 
@@ -65,7 +64,7 @@ describe('Create Book Routes', () => {
                     isValid: false
                }
           })
-          
+
           expect(response.statusCode).toBe(400)
      })
 })
