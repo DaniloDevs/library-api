@@ -3,7 +3,7 @@ import { prisma } from '../../src/lib/prisma'
 import server from '../../src/server'
 
 
-describe('Create Register Routes', async () => {
+describe('Create Reservation Routes', async () => {
      afterAll(async () => {
           await prisma.$transaction([
                prisma.reservations.deleteMany({

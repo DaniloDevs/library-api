@@ -3,7 +3,7 @@ import { prisma } from '../../src/lib/prisma'
 import server from '../../src/server'
 
 
-describe('Cancel Register Routes', async () => {
+describe('Cancel Reservation Routes', async () => {
      afterAll(async () => {
           await prisma.reservations.update({
                where: { id: reservationId },
