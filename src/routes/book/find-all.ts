@@ -3,6 +3,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { prisma } from "../../lib/prisma";
 import z from "zod";
 
+// adicionar status como query
 export async function FindAllBooks(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
