@@ -1,14 +1,13 @@
+import { env } from "../env";
 import server from "./server";
 
 // Iniciando o servidor
 try {
      server.listen({
-          port: 3031,
-          host: "0.0.0.0"
+          port: env.PORT,
      }).then(() => {
-          console.log('Server Running!')
+          console.log(`[INFO] Server is running at http://localhost:${env.PORT}`)
      })
-
 } catch (error) {
      console.error("Error ao iniciar o servidor:", error);
      process.exit(1);

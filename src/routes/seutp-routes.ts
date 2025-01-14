@@ -13,7 +13,11 @@ import { FindReservertionById } from "./reserved/find-by-id";
 export async function RegisterRoutes(server: FastifyInstance) {
 
 	server.get("/", (req, res) => {
-		return res.send("Server is Running!")
+		return res.status(200).send({
+			Message: "The server is up and running correctly",
+			Status: "healthy",
+			Status_Code: 200,
+		})
 	});
 
 	// Books
