@@ -1,21 +1,21 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
-import { prisma } from "../../lib/prisma";
+import { userRepository } from "../../repository/userRepository";
 
 export async function FindUserByUsername(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
-          .get('/users/:slug', {
+          .get('/users/:username', {
                schema: {
                     params: z.object({
-                         slug: z.string()
+                         username: z.string()
                     })
                }
           }, async (request, reply) => {
-               const { slug } = request.params
+               const { username } = request.params
 
-               const user = await prisma.users.findUnique({ where: { username: slug } })
+               const user = await userRepository.findByUsername(username)
 
                if (!user) return reply.status(400).send({ Message: "O username informado não existe" })
 
