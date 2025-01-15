@@ -24,6 +24,14 @@ async function main() {
                     username: "mumumuri",
                 },
             }),
+            prisma.users.create({
+                data: {
+                    name: "Jhon Sena",
+                    email: "sena.exp@gmail.com",
+                    password: "123",
+                    username: "sesese",
+                },
+            }),
         ]);
         console.log("  Users created successfully.\n");
 
@@ -116,25 +124,60 @@ async function main() {
 
         // Criando reservas
         console.log("\u2022 Creating reservations...");
-        const user = await prisma.users.findFirst({ where: { email: "murilo.exp@gmail.com" } });
-        const book = await prisma.books.findFirst({ where: { ISBN: "010001011" } });
+        const [user1, user2, user3] = await prisma.$transaction([
+            prisma.users.findFirst({ where: { email: "murilo.exp@gmail.com" } }),
+            prisma.users.findFirst({ where: { email: "danilo.exp@gmail.com" } }),
+            prisma.users.findFirst({ where: { email: "sena.exp@gmail.com" } }),
+        ]);
 
-        if (user && book) {
-            await prisma.reservations.create({
-                data: {
-                    expiresAt: "3025-02-09T20:49:50.960Z",
-                    status: "ACTIVE",
-                    Users: {
-                        connect: { id: user.id },
+        const [book1, book2, book3] = await prisma.$transaction([
+            prisma.books.findFirst({ where: { ISBN: "010001011" } }),
+            prisma.books.findFirst({ where: { ISBN: "010011011" } }),
+            prisma.books.findFirst({ where: { ISBN: "010001000" } }),
+        ]);
+
+        if (user1 && book1 && user2 && book2 && user3 && book3) {
+            await prisma.$transaction([
+                prisma.reservations.create({
+                    data: {
+                        expiresAt: "3025-02-09T20:49:50.960Z",
+                        status: "ACTIVE",
+                        Users: {
+                            connect: { id: user1.id },
+                        },
+                        Books: {
+                            connect: { id: book1.id },
+                        },
                     },
-                    Books: {
-                        connect: { id: book.id },
+                }),
+                prisma.reservations.create({
+                    data: {
+                        expiresAt: "3025-03-10T15:00:00.000Z",
+                        status: "ACTIVE",
+                        Users: {
+                            connect: { id: user2.id },
+                        },
+                        Books: {
+                            connect: { id: book2.id },
+                        },
                     },
-                },
-            });
+                }),
+                prisma.reservations.create({
+                    data: {
+                        expiresAt: "3025-04-15T10:30:00.000Z",
+                        status: "ACTIVE",
+                        Users: {
+                            connect: { id: user3.id },
+                        },
+                        Books: {
+                            connect: { id: book3.id },
+                        },
+                    },
+                }),
+            ]);
             console.log("  Reservations created successfully.\n");
         } else {
-            console.warn("  Unable to create reservation: User or Book not found.\n");
+            console.warn("  Unable to create reservations: Some users or books not found.\n");
         }
 
         console.log("\n=== Development Data Seeding Complete! ===\n");
