@@ -1,9 +1,8 @@
-
-
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../lib/prisma";
+import { reservationRepository } from "../../repository/reservationRepository";
 
 // adicionar status como query
 export async function FindAllReservertion(server: FastifyInstance) {
@@ -45,9 +44,7 @@ export async function FindAllReservertion(server: FastifyInstance) {
                     Message = `Foi possível listar todas as reservas de ${username} no livro "${book}" .`
                }
 
-               const Reservations = await prisma.reservations.findMany({
-                    where: filters,
-               });
+               const Reservations = await reservationRepository.findAllByFilter(filters)
 
                return reply.code(200).send({
                     Message,

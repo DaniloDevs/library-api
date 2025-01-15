@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
-import { prisma } from "../../lib/prisma";
+import { reservationRepository } from "../../repository/reservationRepository";
 
 
 export async function FindReservertionById(server: FastifyInstance) {
@@ -16,7 +16,7 @@ export async function FindReservertionById(server: FastifyInstance) {
           }, async (request, reply) => {
                const { reservationId } = request.params
 
-               const Reservation = await prisma.reservations.findUnique({ where: { id: reservationId } })
+               const Reservation = await reservationRepository.findById(reservationId)
 
                if (!Reservation) return reply.status(400).send({ Message: "O ID informado não corresponde a nenhuma reserva" })
 

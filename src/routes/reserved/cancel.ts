@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../lib/prisma";
+import { reservationRepository } from "../../repository/reservationRepository";
 
 // adicionar uma data quando foi cancelado
 export async function CancelReservertion(server: FastifyInstance) {
@@ -24,17 +25,7 @@ export async function CancelReservertion(server: FastifyInstance) {
                     Message: "A reserva do ID informado já foi cancelada"
                })
 
-               await prisma.reservations.update({
-                    where: { id: reservationId },
-                    data: {
-                         status: "CANCELLED",
-                         Books: {
-                              update: {
-                                   status: "AVAILABLE"
-                              }
-                         }
-                    }
-               })
+               await reservationRepository.cancel(reservationId)
 
                return reply.status(200).send({
                     Message: "O cancelamento da reservar foi feito com sucesso",
