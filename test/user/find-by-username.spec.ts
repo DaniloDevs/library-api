@@ -2,31 +2,33 @@ import { describe, expect, test } from 'vitest'
 import server from '../../src/server'
 
 
-describe('Find User By Username Routes', () => {
-     test('Deve ser possivel listar um usuario pelo username', async () => {
-          const response = await server.inject({
-               method: 'GET',
-               url: '/users/danidani',
+describe('User Routes', () => {
+     describe('Find User By Username Routes', () => {
+          test('Deve ser possivel listar um usuario pelo username', async () => {
+               const response = await server.inject({
+                    method: 'GET',
+                    url: '/users/danidani',
+               })
+
+               const { Message, User } = JSON.parse(response.body)
+
+               expect(response.statusCode).toBe(200)
+               expect(Message).toBe(`Foi possivel listar com sucesso o usuario`)
+               expect(User.name).toBe('Danilo Romão')
           })
 
-          const { Message, User } = JSON.parse(response.body)
+          test('Deve ser possivel listar um usuario pelo username', async () => {
 
-          expect(response.statusCode).toBe(200)
-          expect(Message).toBe(`Foi possivel listar com sucesso o usuario`)
-          expect(User.name).toBe('Danilo Romão')
-     })
+               const response = await server.inject({
+                    method: 'GET',
+                    url: '/users/mu',
+               })
 
-     test('Deve ser possivel listar um usuario pelo username', async () => {
+               const { Message } = JSON.parse(response.body)
 
-          const response = await server.inject({
-               method: 'GET',
-               url: '/users/mu',
+               expect(response.statusCode).toBe(400)
+               expect(Message).toBe(`O username informado não existe`)
           })
 
-          const { Message } = JSON.parse(response.body)
-
-          expect(response.statusCode).toBe(400)
-          expect(Message).toBe(`O username informado não existe`)
      })
-
 })

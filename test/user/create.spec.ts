@@ -3,65 +3,67 @@ import { prisma } from '../../src/lib/prisma'
 import server from '../../src/server'
 
 
-describe('Create User Routes', () => {
-     afterAll(async () => {
-          await prisma.$transaction([
-               prisma.users.deleteMany({ where: { email: "re.exp@gmail.com" } })
-          ])
-     })
-
-     test('Deve ser possivel criar um usuario com dados invalidos', async () => {
-          const response = await server.inject({
-               method: 'POST',
-               url: '/users',
-               body: {
-                    name: 'Renato Romão',
-                    email: 're.exp@gmail.com',
-                    password: '123',
-                    username: 'rerere',
-               }
+describe('User Routes', () => {
+     describe('Create User Routes', () => {
+          afterAll(async () => {
+               await prisma.$transaction([
+                    prisma.users.deleteMany({ where: { email: "re.exp@gmail.com" } })
+               ])
           })
 
-          const { Message, UserId } = JSON.parse(response.body)
+          test('Deve ser possivel criar um usuario com dados invalidos', async () => {
+               const response = await server.inject({
+                    method: 'POST',
+                    url: '/users',
+                    body: {
+                         name: 'Renato Romão',
+                         email: 're.exp@gmail.com',
+                         password: '123',
+                         username: 'rerere',
+                    }
+               })
 
-          expect(response.statusCode).toBe(201)
-          expect(Message).toBe(`O usuario foi criado com sucesso`)
-          expect(UserId).toBeDefined()
-     })
+               const { Message, UserId } = JSON.parse(response.body)
 
-     test('Não deve ser possivel criar um usuario com um email já utilizado', async () => {
-          const response = await server.inject({
-               method: 'POST',
-               url: '/users',
-               body: {
-                    name: 'Danilo Romão',
-                    email: 're.exp@gmail.com',
-                    password: '123',
-                    username: 'danidani',
-               }
+               expect(response.statusCode).toBe(201)
+               expect(Message).toBe(`O usuario foi criado com sucesso`)
+               expect(UserId).toBeDefined()
           })
 
-          const { Message } = JSON.parse(response.body)
+          test('Não deve ser possivel criar um usuario com um email já utilizado', async () => {
+               const response = await server.inject({
+                    method: 'POST',
+                    url: '/users',
+                    body: {
+                         name: 'Danilo Romão',
+                         email: 're.exp@gmail.com',
+                         password: '123',
+                         username: 'danidani',
+                    }
+               })
 
-          expect(response.statusCode).toBe(400)
-          expect(Message).toBe(`Esse email já esta sendo utilizado`)
-     })
+               const { Message } = JSON.parse(response.body)
 
-     test('Não deve ser possivel criar um usuario com um username já utilizado', async () => {
-          const response = await server.inject({
-               method: 'POST',
-               url: '/users',
-               body: {
-                    name: 'Danilo Romão',
-                    email: 'romao.exp@gmail.com',
-                    password: '123',
-                    username: 'rerere',
-               }
+               expect(response.statusCode).toBe(400)
+               expect(Message).toBe(`Esse email já esta sendo utilizado`)
           })
 
-          const { Message } = JSON.parse(response.body)
+          test('Não deve ser possivel criar um usuario com um username já utilizado', async () => {
+               const response = await server.inject({
+                    method: 'POST',
+                    url: '/users',
+                    body: {
+                         name: 'Danilo Romão',
+                         email: 'romao.exp@gmail.com',
+                         password: '123',
+                         username: 'rerere',
+                    }
+               })
 
-          expect(response.statusCode).toBe(400)
-          expect(Message).toBe(`Esse username já esta sendo utilizado`)
+               const { Message } = JSON.parse(response.body)
+
+               expect(response.statusCode).toBe(400)
+               expect(Message).toBe(`Esse username já esta sendo utilizado`)
+          })
      })
 })
