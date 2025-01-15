@@ -6,7 +6,7 @@
 
 | Mvps            | Status |
 | --------------- | :----: |
-| Reservar livro  |   ✖️   |
+| Reservar livro  |   ✅   |
 | receber multa   |   ✖️   |
 | criar clube     |   ✖️   |
 | entrar em clube |   ✖️   |
@@ -23,7 +23,7 @@
 | Find Book By Slug     |  ✅   |   ✅    |
 | Find Book By Category |  ✅   |   ✅    |
 | Find Book By Author   |  ✅   |   ✅    |
-| Reserd Book           |  ✖️   |   ✖️    |
+| Reserd Book           |  ✅   |   ✅    |
 | Return Book           |  ✖️   |   ✖️    |
 
 <br />
@@ -35,7 +35,7 @@
 | -------------------------------------------------------------------------------- | :---: |
 | Reservar livro durante 1 mês                                                     |  ✖️   |
 | Receber multa caso o livro seja entregue depois da data                          |  ✖️   |
-| Não pode reservar um livro já reservado                                          |  ✖️   |
+| Não pode reservar um livro já reservado                                          |  ✅   |
 | Não poder reservar um livro que está com um estado ruim                          |  ✖️   |
 | Não poder criar um evento sem um professor responsável                           |  ✖️   |
 | Não poder criar evento para um dia que já passou                                 |  ✖️   |

@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import server from "../../src/server";
 
 
+describe('Book Routes', () => {
 describe('Filter Books by Category', async () => {
      test('Deve ser possivel listar todos os livros de uma category', async () => {
           const response = await server.inject({
@@ -27,4 +28,5 @@ describe('Filter Books by Category', async () => {
           expect(response.statusCode).toBe(400)
           expect(Message).toBe(`A categoria "aspas" informada não existe.`)
      })
+})
 })
