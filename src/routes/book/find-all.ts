@@ -2,8 +2,9 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { prisma } from "../../lib/prisma";
 import z from "zod";
+import { bookRespository } from "../../repository/bookRepository";
 
-// adicionar status como query
+// adicionar uma query de STATUS
 export async function FindAllBooks(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()
@@ -52,9 +53,7 @@ export async function FindAllBooks(server: FastifyInstance) {
                }
 
                // Consulta ao banco com os filtros aplicados
-               const Books = await prisma.books.findMany({
-                    where: filters,
-               });
+               const Books = await bookRespository.findAllByFilter(filters)
 
                return reply.code(200).send({
                     Message,

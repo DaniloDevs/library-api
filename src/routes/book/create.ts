@@ -3,6 +3,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from '../../lib/prisma';
 import { CreateSlug } from '../../utils/create-slug';
+import { bookRespository } from "../../repository/bookRepository";
 
 
 export async function CreateBook(server: FastifyInstance) {
@@ -19,42 +20,16 @@ export async function CreateBook(server: FastifyInstance) {
                     })
                }
           }, async (request, reply) => {
-               const { title, author, category, ISBN, rating } = request.body
+               const data = request.body
 
-               const existBook = await prisma.books.findUnique({ where: { ISBN } })
+               const existBook = await prisma.books.findUnique({ where: { ISBN: data.ISBN } })
 
                if (existBook) return reply.code(401).send({ Message: "O livro cadastrado ja existe no sistema" })
 
-               const book = await prisma.books.create({
-                    data: {
-                         title,
-                         slug: CreateSlug(title),
-                         ISBN,
-                         rating,
-                         status: "AVAILABLE",
-                         author: {
-                              connectOrCreate: {
-                                   where: { name: author },
-                                   create: {
-                                        name: author,
-                                        slug: CreateSlug(author),
-                                   }
-                              }
-                         },
-                         category: {
-                              connectOrCreate: {
-                                   where: { name: category },
-                                   create: {
-                                        name: category,
-                                        slug: CreateSlug(category),
-                                   }
-                              }
-                         },
-                    }
-               })
+               const book = await bookRespository.create(data)
 
                return reply.code(201).send({
-                    Message: `O livro ${title} foi cadastrado com sucesso!`,
+                    Message: `O livro ${data.title} foi cadastrado com sucesso!`,
                     Book: book
                })
           })

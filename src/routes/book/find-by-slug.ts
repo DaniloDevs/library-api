@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../lib/prisma";
+import { bookRespository } from "../../repository/bookRepository";
 
 
 export async function FindBookBySlug(server: FastifyInstance) {
@@ -16,7 +17,7 @@ export async function FindBookBySlug(server: FastifyInstance) {
           }, async (request, reply) => {
                const { slug } = request.params
 
-               const book = await prisma.books.findUnique({ where: { slug } })
+               const book = await bookRespository.findBySlug(slug)
 
                if(!book) return reply.code(401).send({Message: 'Não foi possivel encontrar um livro com essa slug'})
 
