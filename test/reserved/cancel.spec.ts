@@ -53,7 +53,7 @@ describe('Reservation Routes', async () => {
           test('Não deve ser possivel poder cancelar uma reserva que não existe', async () => {
                const response = await server.inject({
                     method: 'DELETE',
-                    url: `/reservations/36780413-3410413`,
+                    url: `/reservations/3613-3410413`,
                })
                const { Message } = JSON.parse(response.body)
 
