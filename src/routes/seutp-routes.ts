@@ -8,6 +8,7 @@ import { CreateReservation } from "./reserved/create";
 import { CancelReservertion } from "./reserved/cancel";
 import { FindAllReservertion } from "./reserved/find-all";
 import { FindReservertionById } from "./reserved/find-by-id";
+import CreateLoan from "./loan/create";
 
 
 export async function RegisterRoutes(server: FastifyInstance) {
@@ -34,4 +35,7 @@ export async function RegisterRoutes(server: FastifyInstance) {
 	server.register(CancelReservertion)
 	server.register(FindAllReservertion)
 	server.register(FindReservertionById)
+
+	// Loan 
+	server.register(CreateLoan)
 }
