@@ -10,6 +10,7 @@ describe('Reservation Routes', async () => {
                     where: { id: reservationId },
                     data: {
                          status: 'ACTIVE',
+                         canceledAt: null,
                          Books: {
                               update: {
                                    status: 'RESERVED'

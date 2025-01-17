@@ -4,7 +4,7 @@ import z from "zod";
 import { prisma } from "../../lib/prisma";
 import { reservationRepository } from "../../repository/reservationRepository";
 
-// adicionar uma data quando foi cancelado
+
 export async function CancelReservertion(server: FastifyInstance) {
      server
           .withTypeProvider<ZodTypeProvider>()

@@ -2,13 +2,10 @@ import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 import { prisma } from "../../lib/prisma";
-import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
-import LocalizedFormat from 'dayjs/plugin/LocalizedFormat';
 import { reservationRepository } from "../../repository/reservationRepository";
+import FormatDate from "../../utils/format-date";
 
-dayjs.locale('pt-br')
-dayjs.extend(LocalizedFormat)
 
 export async function CreateReservation(server: FastifyInstance) {
      server
@@ -18,15 +15,10 @@ export async function CreateReservation(server: FastifyInstance) {
                     body: z.object({
                          bookId: z.string(),
                          userId: z.string(),
-                         expiresAt: z.coerce.date()
                     })
                }
           }, async (request, reply) => {
                const data = request.body
-
-               if (dayjs(data.expiresAt).isBefore(new Date())) {
-                    return reply.status(400).send({ Message: "O livro deve ser reservado ate uma data maior que hoje" })
-               }
 
                const [book, user] = await prisma.$transaction([
                     prisma.books.findUnique({ where: { id: data.bookId } }),
@@ -40,10 +32,11 @@ export async function CreateReservation(server: FastifyInstance) {
 
                const reserved = await reservationRepository.create(data)
 
-               const formattedExpiresDate = dayjs(data.expiresAt).format('LL')
+               const formattedExpiresDate = FormatDate(reserved.expiresAt) 
                
                return reply.status(201).send({
-                    Message: `Foi possivel reservar com sucesso o livro ${book.title} ate a data ${formattedExpiresDate}`,
+                    Message: `Foi possível realizar a reserva com sucesso para o livro "${book.title}". Sua reserva é válida até ${formattedExpiresDate}.`,
+                    LoanCode: reserved.loanCode,
                     ReservedId: reserved.id,
                })
           })

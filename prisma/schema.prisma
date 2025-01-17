@@ -14,21 +14,40 @@ model Users {
   email        String         @unique
   password     String
   reservations Reservations[]
+  Loans        Loans[]
 
   @@map("user")
 }
 
 model Reservations {
-  id        String         @id @default(uuid())
-  createdAt DateTime       @default(now())
-  expiresAt DateTime
-  usersId   String?
-  booksId   String?
-  status    StatusReserved
-  Books     Books?         @relation(fields: [booksId], references: [id])
-  Users     Users?         @relation(fields: [usersId], references: [id])
+  id         String         @id @default(uuid())
+  createdAt  DateTime       @default(now())
+  expiresAt  DateTime
+  canceledAt DateTime?
+  loanCode   String
+  usersId    String?
+  booksId    String?
+  status     StatusReserved
+  Loans      Loans[]
+
+  Books Books? @relation(fields: [booksId], references: [id])
+  Users Users? @relation(fields: [usersId], references: [id])
 
   @@map("reserved")
+}
+
+model Loans {
+  id             String @id @default(uuid())
+  code           String
+  booksId        String
+  usersId        String
+  reservationsId String
+
+  Books        Books        @relation(fields: [booksId], references: [id])
+  Users        Users        @relation(fields: [usersId], references: [id])
+  Reservations Reservations @relation(fields: [reservationsId], references: [id])
+
+  @@map("loan")
 }
 
 model Books {
@@ -40,10 +59,12 @@ model Books {
   reserved     Boolean        @default(false)
   authorsId    String
   categorysId  String
-  status       StatusBook     @default(AVAILABLE)
-  author       Authors        @relation(fields: [authorsId], references: [id])
-  category     Categorys      @relation(fields: [categorysId], references: [id])
   reservations Reservations[]
+  Loans        Loans[]
+
+  status   StatusBook @default(AVAILABLE)
+  author   Authors    @relation(fields: [authorsId], references: [id])
+  category Categorys  @relation(fields: [categorysId], references: [id])
 
   @@map("book")
 }
@@ -69,6 +90,7 @@ model Categorys {
 enum StatusBook {
   RESERVED
   AVAILABLE
+  BORROWED
 }
 
 enum StatusReserved {

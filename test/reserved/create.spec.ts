@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, test } from 'vitest'
 import { prisma } from '../../src/lib/prisma'
 import server from '../../src/server'
+import FormatDate from '../../src/utils/format-date'
 
 
 describe('Reservation Routes', async () => {
@@ -46,37 +47,21 @@ describe('Reservation Routes', async () => {
                     method: 'POST',
                     url: '/reservations',
                     body: {
-                         expiresAt: "3025-02-09T20:49:50.960Z",
                          bookId: Book.id,
                          userId: User.id,
                     }
                })
 
                const { Message, ReservedId } = JSON.parse(response.body)
-
-
-               expect(Message).toBe("Foi possivel reservar com sucesso o livro iHelp Backends ate a data 9 de fevereiro de 3025")
+               const currentDate = new Date();
+               const expiresAt = new Date();
+               expiresAt.setDate(currentDate.getDate() + 30);
+               const formattedExpiresDate = FormatDate(expiresAt)
+               expect(Message).toBe(`Foi possível realizar a reserva com sucesso para o livro "${Book.title}". Sua reserva é válida até ${formattedExpiresDate}.`)
                expect(response.statusCode).toBe(201)
                expect(ReservedId).toBeDefined()
           })
-          test('não deve ser possivel poder reservar um livro para um dia anterior a hoje', async () => {
-               const response = await server.inject({
-                    method: 'POST',
-                    url: '/reservations',
-                    body: {
-                         expiresAt: "1025-02-08T20:49:50.960Z",
-                         bookId: Book.id,
-                         userId: User.id,
-                    }
-               })
-
-               const { Message, ReservedId } = JSON.parse(response.body)
-
-
-               expect(Message).toBe("O livro deve ser reservado ate uma data maior que hoje")
-               expect(response.statusCode).toBe(400)
-          })
-
+       
           test('Não deve ser possivel reservar um livro ja reservado', async () => {
                const response = await server.inject({
                     method: 'POST',

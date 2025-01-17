@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
-import { Reservations } from "@prisma/client";
+import CreateUniqueCode from "../utils/create-unique-id";
+import { randomUUID } from "node:crypto";
 
 // Tipos para dados de reserva
 interface IReservationRepository {
@@ -13,7 +14,6 @@ interface IReservationRepository {
 interface ReservationData {
      bookId: string;
      userId: string;
-     expiresAt: Date;
 }
 
 interface ReservationFilter {
@@ -24,11 +24,16 @@ interface ReservationFilter {
 // Classe de repositório
 class ReservationRepository implements IReservationRepository {
      async create(data: ReservationData): Promise<any> {
+          const currentDate = new Date();
+          const expiresAt = new Date();
+          expiresAt.setDate(currentDate.getDate() + 30);
+
           const [reservation] = await prisma.$transaction([
                prisma.reservations.create({
                     data: {
-                         expiresAt: data.expiresAt,
+                         expiresAt,
                          status: "ACTIVE",
+                         loanCode: CreateUniqueCode(randomUUID()),
                          Users: {
                               connect: { id: data.userId },
                          },
@@ -51,6 +56,7 @@ class ReservationRepository implements IReservationRepository {
                where: { id },
                data: {
                     status: "CANCELLED",
+                    canceledAt: new Date(),
                     Books: {
                          update: {
                               status: "AVAILABLE"

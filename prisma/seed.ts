@@ -1,5 +1,7 @@
 import { prisma } from "../src/lib/prisma";
 import { CreateSlug } from "../src/utils/create-slug";
+import { randomUUID } from "node:crypto";
+import CreateUniqueCode from "../src/utils/create-unique-id";
 
 async function main() {
     console.log("\n=== Starting Development Data Seeding ===\n");
@@ -30,6 +32,14 @@ async function main() {
                     email: "sena.exp@gmail.com",
                     password: "123",
                     username: "sesese",
+                },
+            }),
+            prisma.users.create({
+                data: {
+                    name: "Carlos Silva",
+                    email: "carlos.exp@gmail.com",
+                    password: "123",
+                    username: "carlcarl",
                 },
             }),
         ]);
@@ -119,29 +129,63 @@ async function main() {
                     },
                 },
             }),
+            prisma.books.create({
+                data: {
+                    title: "iHelp Mobile",
+                    ISBN: "010011111",
+                    slug: CreateSlug("iHelp Mobile"),
+                    status: "AVAILABLE",
+                    rating: 5,
+                    author: {
+                        connectOrCreate: {
+                            where: { name: "Carlos" },
+                            create: {
+                                name: "Carlos",
+                                slug: CreateSlug("Carlos"),
+                            },
+                        },
+                    },
+                    category: {
+                        connectOrCreate: {
+                            where: { name: "Aplicativos" },
+                            create: {
+                                name: "Aplicativos",
+                                slug: CreateSlug("Aplicativos"),
+                            },
+                        },
+                    },
+                },
+            }),
         ]);
         console.log("  Books created successfully.\n");
 
         // Criando reservas
         console.log("\u2022 Creating reservations...");
-        const [user1, user2, user3] = await prisma.$transaction([
+        const [user1, user2, user3, user4] = await prisma.$transaction([
             prisma.users.findFirst({ where: { email: "murilo.exp@gmail.com" } }),
             prisma.users.findFirst({ where: { email: "danilo.exp@gmail.com" } }),
             prisma.users.findFirst({ where: { email: "sena.exp@gmail.com" } }),
+            prisma.users.findFirst({ where: { email: "carlos.exp@gmail.com" } }),
         ]);
 
-        const [book1, book2, book3] = await prisma.$transaction([
+        const [book1, book2, book3, book4] = await prisma.$transaction([
             prisma.books.findFirst({ where: { ISBN: "010001011" } }),
             prisma.books.findFirst({ where: { ISBN: "010011011" } }),
             prisma.books.findFirst({ where: { ISBN: "010001000" } }),
+            prisma.books.findFirst({ where: { ISBN: "010011111" } }),
         ]);
 
-        if (user1 && book1 && user2 && book2 && user3 && book3) {
+        if (user1 && book1 && user2 && book2 && user3 && book3 && user4 && book4) {
+            const currentDate = new Date();
+            const expiresAt = new Date();
+            expiresAt.setDate(currentDate.getDate() + 30);
+
             await prisma.$transaction([
                 prisma.reservations.create({
                     data: {
-                        expiresAt: "3025-02-09T20:49:50.960Z",
+                        expiresAt,
                         status: "ACTIVE",
+                        loanCode: CreateUniqueCode(randomUUID()),
                         Users: {
                             connect: { id: user1.id },
                         },
@@ -152,8 +196,9 @@ async function main() {
                 }),
                 prisma.reservations.create({
                     data: {
-                        expiresAt: "3025-03-10T15:00:00.000Z",
+                        expiresAt,
                         status: "ACTIVE",
+                        loanCode: CreateUniqueCode(randomUUID()),
                         Users: {
                             connect: { id: user2.id },
                         },
@@ -164,13 +209,14 @@ async function main() {
                 }),
                 prisma.reservations.create({
                     data: {
-                        expiresAt: "3025-04-15T10:30:00.000Z",
+                        expiresAt,
                         status: "ACTIVE",
+                        loanCode: CreateUniqueCode(randomUUID()),
                         Users: {
-                            connect: { id: user3.id },
+                            connect: { id: user4.id },
                         },
                         Books: {
-                            connect: { id: book3.id },
+                            connect: { id: book4.id },
                         },
                     },
                 }),
